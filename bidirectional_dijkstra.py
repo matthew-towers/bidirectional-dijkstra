@@ -3,6 +3,7 @@ import queue
 import random
 from collections import defaultdict
 
+
 def bidirectional_dijkstra(g, s, t, wt):
     # Find the length of the shortest path from s to t in the undirected
     # networkx Graph g with edge weight function weight, using
@@ -11,23 +12,23 @@ def bidirectional_dijkstra(g, s, t, wt):
     def weight(x, y):
         return wt(x, y, None)
 
-    df = defaultdict(lambda: float('inf')) # df[v] = forward approximation of d(s, v)
+    df = defaultdict(lambda: float("inf"))  # df[v] = forward approximation of d(s, v)
     df[s] = 0
-    db = defaultdict(lambda: float('inf')) # db[v] = backward approximation of d(t, v)
+    db = defaultdict(lambda: float("inf"))  # db[v] = backward approximation of d(t, v)
     db[t] = 0
 
-    fq = queue.PriorityQueue() # queue of vertices to explore in foward search
-    fq.put((0, s)) # queue elements have the form (priority, node)
-    bq = queue.PriorityQueue() # queue of vertices to explore in backward search
+    fq = queue.PriorityQueue()  # queue of vertices to explore in foward search
+    fq.put((0, s))  # queue elements have the form (priority, node)
+    bq = queue.PriorityQueue()  # queue of vertices to explore in backward search
     bq.put((0, t))
 
-    mu = float('inf') # length of best path yet seen
+    mu = float("inf")  # length of best path yet seen
 
-    sf = set() # nodes processed in the forward search
-    sb = set() # nodes processed in the backward search
+    sf = set()  # nodes processed in the forward search
+    sb = set()  # nodes processed in the backward search
 
     while (not fq.empty()) and (not bq.empty()):
-        u = fq.get()[1] # get is a "pop"
+        u = fq.get()[1]  # get is a "pop"
         v = bq.get()[1]
         sf.add(u)
         sb.add(v)
@@ -68,6 +69,7 @@ def test_bidirectional_dijkstra(g, s, t, weight):
     else:
         print("Fail. nx: ", nxDistance, "\t bidirectional: ", myDistance)
 
+
 ##############
 # Test cases #
 ##############
@@ -77,7 +79,7 @@ def test_bidirectional_dijkstra(g, s, t, weight):
 # 1  4
 #  \3/
 
-g = nx.Graph()
+g = nx.Graph()  # nx.Graph is undirected
 g.add_nodes_from([1, 2, 3, 4])
 g.add_edge(1, 2)
 g.add_edge(2, 4)
@@ -94,6 +96,34 @@ def w(x, y, _):
 
 
 test_bidirectional_dijkstra(g, 1, 4, w)
+
+# Example from https://stackoverflow.com/questions/68768498/dijkstras-bi-directional-implementation
+#     1   1   1   1
+#   E - D - C - B - A
+# 1 |               | 8
+#   F - G - H - I - J
+#     1   1   1   1
+# The true shortest path from A to J has length 8, and the asker says that a Java implementation of bidirectional Dijkstra gives the wrong result.
+
+h = nx.Graph()
+h.add_nodes_from([c for c in "ABCDEFGHIJ"])
+weights = {
+    ("E", "D"): 1,
+    ("D", "C"): 1,
+    ("C", "B"): 1,
+    ("B", "A"): 1,
+    ("A", "J"): 8,
+    ("E", "F"): 1,
+    ("F", "G"): 1,
+    ("G", "H"): 1,
+    ("H", "I"): 1,
+    ("I", "J"): 1,
+}
+for e in weights.keys():
+    h.add_edge(e[0], e[1])
+
+test_bidirectional_dijkstra(h, "A", "J", w)
+
 
 # Example from 6.006 recitation 16
 
@@ -118,7 +148,8 @@ nodeList = list(k.nodes)
 # vxs and m edges. Max number of edges is (1/2)*100*99
 # Erdos Renyi generates edges with probabilty p
 
-weights = {} # will hold edge weights in the graph k
+weights = {}  # will hold edge weights in the graph k
+
 
 def wt(x, y, _):
     # return the weight of x-y if it has been set, otherwise generate
@@ -140,5 +171,3 @@ for _ in range(50):
     if s != t:
         print("cc size", len(nx.node_connected_component(k, s)))
         test_bidirectional_dijkstra(k, s, t, wt)
-    
-
