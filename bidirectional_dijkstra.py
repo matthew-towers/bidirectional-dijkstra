@@ -18,9 +18,6 @@ def bidirectional_dijkstra(g, s, t, weight):
         bidirectional Dijkstra.
     """
 
-    # def weight(x, y):
-    #     return wt(x, y, None)
-
     df = defaultdict(lambda: float("inf"))  # df[v] = forward approximation of d(s, v)
     df[s] = 0
     db = defaultdict(lambda: float("inf"))  # db[v] = backward approximation of d(t, v)
@@ -123,7 +120,7 @@ class BidirectionalDijkstraTests(unittest.TestCase):
         # that a Java implementation of bidirectional Dijkstra gives the wrong
         # result.
         h = nx.Graph()
-        h.add_nodes_from([c for c in "ABCDEFGHIJ"])
+        h.add_nodes_from(list("ABCDEFGHIJ"))
         weights = {
             ("E", "D"): 1,
             ("D", "C"): 1,
