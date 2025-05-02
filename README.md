@@ -6,3 +6,5 @@ link](https://www.ucl.ac.uk/~ucahmto/math/2020/05/30/bidirectional-dijkstra.html
 for a description of how it works.
 
 I used the `Graph` class from NetworkX.
+
+Run the tests with `python -m unittest -v bidirectional_dijkstra.py`
